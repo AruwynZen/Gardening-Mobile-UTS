@@ -6,19 +6,35 @@ import {
   TouchableOpacity, 
   Text 
 } from 'react-native';
+import AuthContext from '../context/AuthContext';
 
 export default Loginscreen = ({navigation}) => {
+    const {login} = React.useContext(AuthContext);
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
-    const [alert, showAlert] = React.useState('');
-    
-    const onAlert = () => {
-      if (email === '' && password === '') {
-        showAlert(true);
-        return;
-      }
-      navigation.navigate('Home');
+    const [loading, setLoading] = React.useState(false);
+    // const [alert, showAlert] = React.useState('');
+
+    async function onLogin(){
+      setLoading(true);
+      try{
+        await login({email, password});
+        navigation.navigate('Home');
+      } 
+        catch (err){
+          console.error(err);
+        }
+        finally{
+          setLoading(false);
+        }
     }
+    // const onAlert = () => {
+    //   if (email === '' && password === '') {
+    //     showAlert(true);
+    //     return;
+    //   }
+    //   navigation.navigate('Home');
+    // }
     return (
         <View style={styles.container}>
         <View style={styles.statusBar}/>
@@ -35,15 +51,15 @@ export default Loginscreen = ({navigation}) => {
         onChangeText={(text) => onChangePassword(text)}
         value={password}
         />
-        <TouchableOpacity style={[styles.buttonLogin]} onPress={onAlert}>
+        <TouchableOpacity style={[styles.buttonLogin]} loading={loading} onPress={onLogin}>
         <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         </View>
-        {alert ? (
+        {/* {alert ? (
           <View style={{alignItems: 'center'}}>
           <Text style={{color: 'red'}}>Username dan Password Salah</Text>
           </View>
-        ):null}
+        ):null} */}
         <View style={styles.footerWrapper}>
         <Text>
           {"Don't have an account?"}

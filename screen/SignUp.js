@@ -6,26 +6,46 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import AuthContext from '../context/AuthContext';
+
 
 export default Signupscreen = ({navigation}) => {
-  const [email, onChangeEmail] = React.useState('');
-  const [mail, onChangeMail] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
-  const [alert, showAlert] = React.useState('');
+    const {signup} = React.useContext(AuthContext);
+    const [email, onChangeEmail] = React.useState('');
+    // const [mail, onChangeMail] = React.useState('');
+    const [password, onChangePassword] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
+    const [confirm, setConfirm] = React.useState('');
+    // const [alert, showAlert] = React.useState('');
     
-    const onAlert = () => {
-      if (email === '' && password === '' && mail === '') {
-        showAlert(true);
-        return;
-      }
-      navigation.navigate('Login');
-    }
+    // const onAlert = () => {
+    //   if (email === '' && password === '' && mail === '') {
+    //     showAlert(true);
+    //     return;
+    //   }
+    //   navigation.navigate('Login');
+    // }
 
+    async function onSignup() {
+        setLoading(true);
+        try {
+          if (confirm !== password) {
+            setError(true);
+          } else {
+            await signup({email, password});
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoading(false);
+        }
+      }
+    
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Let's Sign You In CoGarden</Text>
         <View style={styles.formWrapper}>
-            <View>
+            {/* <View>
             <Text style={styles.emailText}>Username</Text>
             <View style={styles.emailInputWrapper}>
                 <TextInput
@@ -34,14 +54,14 @@ export default Signupscreen = ({navigation}) => {
                 value={email}
                 />
             </View>
-            </View>
+            </View> */}
             <View>
             <Text style={styles.emailText}>E-mail</Text>
             <View style={styles.emailInputWrapper}>
                 <TextInput
                 style={styles.emailInput}
-                onChangeText={(text) => onChangeMail(text)}
-                value={mail}
+                onChangeText={(text) => onChangeEmail(text)}
+                value={email}
                 />
             </View>
             </View>
@@ -56,17 +76,28 @@ export default Signupscreen = ({navigation}) => {
                 />
             </View>
             </View>
+            <View>
+            <Text style={styles.emailText}>Confirm Password</Text>
+            <View style={styles.emailInputWrapper}>
+            <TextInput
+              secureTextEntry={true}
+              value={confirm}
+              onChangeText={(text) => setConfirm(text)}
+              style={styles.emailInput}
+            />
+            </View>
+            </View>
         </View>
-        <TouchableOpacity style={styles.buttonWrapper} onPress={onAlert}>
+        <TouchableOpacity style={styles.buttonWrapper} loading={loading} onPress={onSignup}>
             <View style={styles.button}>
             <Text style={styles.textButton}>Sign Up</Text>
             </View>
         </TouchableOpacity>
-        {alert ? ( 
+        {/* {alert ? ( 
           <View style={{alignItems: 'center', marginTop: 10}}>
           <Text style={{color: 'red'}}>Masih ada data yang kosong, mohon dilengkapi!</Text>
           </View>
-        ):null}
+        ):null} */}
         <View style={styles.footerWrapper}>
             <Text style={styles.firstText}>
             Already have an account?

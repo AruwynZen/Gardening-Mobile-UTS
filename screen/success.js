@@ -1,21 +1,9 @@
-import Loginscreen from './Login';
-import Signupscreen from './SignUp';
 import Main from './Home';
 import Detail from './Detail';
 import Userscreen from './User';
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
 export default [
-    {
-        name: 'Login',
-        component: Loginscreen,
-        options: { headerShow: false },
-    },
-    {
-        name: 'SignUp',
-        component: Signupscreen,
-        options: { headerShow: false },
-    },
     {
         name: 'Home',
         component: Main,

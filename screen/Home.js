@@ -28,8 +28,8 @@ export default Main = ({ navigation }) => {
 
   return (
     <View style={{flex: 1}}>
-    <View styles={{position: 'relative'}}>
-      <TextInput placeholder="Nama Tanaman yang dicari" style={styles.searchBar}/>
+    <View >
+      <TextInput style={styles.searchBar} placeholder="Nama Tanaman yang dicari" style={styles.searchBar}/>
       <Image style={styles.iconsearch} source={require('../assets/images/menulogo/search.png')}/>
     </View>
     <ScrollView style={styles.container}>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     borderWidth: 1,
-    marginTop: 5,
+    marginTop: 25,
     borderColor: "grey", 
     borderRadius: 24,
     backgroundColor: "#ffff",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   iconsearch: {
     position: "absolute",
-    top: 14,
+    top: 35,
     left: 12
   },
   dealContainer: {
