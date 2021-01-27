@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { CardStyleInterpolators } from '@react-navigation/stack';
@@ -10,10 +8,9 @@ import {ToastAndroid} from 'react-native';
 import firebase from './config';
 import AuthContext from './context/AuthContext';
 import screens from "./screen/index";
-import success from "./screen/success";
 
 const Stack = createStackNavigator();
-// const Tab = createBottomTabNavigator();
+const cd = firebase.firestore();
 
 function FirebaseStackNavigation() {
   const [state, dispatch] = React.useReducer(
@@ -70,14 +67,14 @@ function FirebaseStackNavigation() {
         ToastAndroid.show(err.message, ToastAndroid.LONG);
       }
     },
-    async logout() {
-      try {
-        await AsyncStorage.removeItem('uid');
-        dispatch({type: 'LOGOUT'});
-      } catch (err) {
-        console.error(err);
-      }
-    },
+    // async logout() {
+    //   try {
+    //     await AsyncStorage.removeItem('uid');
+    //     dispatch({type: 'LOGOUT'});
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // },
   }));
   return (
     <AuthContext.Provider value={authContext}>

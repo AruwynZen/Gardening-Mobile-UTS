@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,22 +10,37 @@ import {
   TextInput,
   ScrollView
 } from 'react-native';
+import { FontAwesome } from "@expo/vector-icons";
+import * as ImagePicker from 'expo-image-picker';
 
 export default Main = ({ navigation }) => {
+  const [image, setImage] = useState(null);
 
-  const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity onPress={()=>navigation.navigate('PersonInfo')}>
-        <View style={styles.subjectContainer}>
-          <Image
-            source={item.image}
-          />
-          <Text style={{marginTop: 5}}>{item.title}</Text>
-        </View>
-      </TouchableOpacity>
-    );
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
   };
-
   return (
     <View style={{flex: 1}}>
     <View >
@@ -54,59 +69,41 @@ export default Main = ({ navigation }) => {
           </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.dealWrapper}>
-          <Image style={{marginRight: 20, width: 100, height: 100}} source={require('../assets/images/monstera.png')} />
-          <TouchableOpacity onPress={()=>navigation.navigate('Detail')}>
-          <View>
-            <Text style={{fontWeight: 'bold', }}>Monstera</Text>
-            <Text>Tanaman Hias</Text>
-            <Text style={{color: "grey"}}>See more</Text>
-          </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dealWrapper}>
-          <Image style={{marginRight: 20, width: 100, height: 100}} source={require('../assets/images/monstera.png')} />
-          <TouchableOpacity onPress={()=>navigation.navigate('Detail')}>
-          <View>
-            <Text style={{fontWeight: 'bold', }}>Monstera</Text>
-            <Text>Tanaman Hias</Text>
-            <Text style={{color: "grey"}}>See more</Text>
-          </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dealWrapper}>
-          <Image style={{marginRight: 20, width: 100, height: 100}} source={require('../assets/images/monstera.png')} />
-          <TouchableOpacity onPress={()=>navigation.navigate('Detail')}>
-          <View>
-            <Text style={{fontWeight: 'bold', }}>Monstera</Text>
-            <Text>Tanaman Hias</Text>
-            <Text style={{color: "grey"}}>See more</Text>
-          </View>
-          </TouchableOpacity>
-        </View>
       </View>
     </ScrollView>
     <View style={styles.footer}>
       <View style={styles.menuBar}>
         <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
         <View style={styles.menuLogo}>
-        <Image source={require('../assets/images/menulogo/home.png')} />
+        <FontAwesome
+        name="home"
+        size={30}
+        style={{color: 'silver', alignSelf: 'center'}}
+      />
         </View>
         <Text style={styles.textMenu}>Home</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.menuBar}>
-      <TouchableOpacity onPress={()=>navigation.navigate('Detail')}>
+      <TouchableOpacity onPress={pickImage}>
       <View style={styles.menuLogo}>
-      <Image source={require('../assets/images/menulogo/help.png')} />
+      <FontAwesome
+        name="plus"
+        size={30}
+        style={{color: 'silver', alignSelf: 'center'}}
+      />
       </View>
-        <Text style={styles.textMenu}>Detail</Text>
+        <Text style={styles.textMenu}>Add</Text>
       </TouchableOpacity>
       </View>
       <View style={styles.menuBar}>
       <TouchableOpacity onPress={()=>navigation.navigate('User')}>
       <View style={styles.menuLogo}>
-      <Image source={require('../assets/images/menulogo/account.png')} />
+      <FontAwesome
+        name="user"
+        size={30}
+        style={{color: 'silver', alignSelf: 'center'}}
+      />
       </View>
         <Text style={styles.textMenu}> User</Text>
       </TouchableOpacity>
@@ -170,5 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#545454",
     marginTop: 4,
+    alignSelf: 'center',
   }
 });
